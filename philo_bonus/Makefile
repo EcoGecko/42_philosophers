@@ -1,5 +1,5 @@
 #NAME
-NAME	= philo
+NAME	= philo_bonus
 
 #COMPILATION
 CC		= cc
@@ -35,7 +35,7 @@ INCDIR	= include
 
 #FILES
 
-SRCF	= utils times tests
+SRCF	=
 
 SRCS	= $(addprefix ${SRCDIR}/, $(addsuffix .c, ${SRCF}))
 OBJS	= $(addprefix ${OBJDIR}/, $(addsuffix .o, ${SRCF}))
@@ -43,12 +43,13 @@ OBJS	= $(addprefix ${OBJDIR}/, $(addsuffix .o, ${SRCF}))
 all: ${NAME}
 
 ${NAME}: ${OBJS}
-	${CC} ${CFLAGS} main.c -I ${INCDIR} ${OBJS} -o ${NAME}
+	${CC} ${FLAGS} main.c -I ${INCDIR} ${OBJS} -o ${NAME}
 	printf "$(GREEN)$@ compiled\n$(RESET)"
 
 ${OBJDIR}/%.o: ${SRCDIR}/%.c | ${OBJDIR}
-	${CC} ${CFLAGS} -I ${INCDIR} -c $< -o $@
+	${CC} ${FLAGS} -I ${INCDIR} -c $< -o $@
 	printf "$(GREEN)Compiled $<\n$(RESET)"
+
 
 ${OBJDIR}:
 	mkdir -p $@
@@ -62,13 +63,10 @@ fclean: clean
 re: fclean all
 
 debug:
-	${CC} -g3 main.c ${SRCS} -I${INCDIR} -o ${NAME}
+	${CC} -g3 main.c ${SRCS} -I${INCS} -o ${NAME}
 
 mem: re
-	valgrind ${VFLAGS} ./${NAME} 5 400 200 200
-
-run:
-	./${NAME} 5 400 200 200
+	valgrind ${VFLAGS} ./${NAME}
 
 norm:
 	@printf "$(CURSIVE)$(YELLOW)"
@@ -77,4 +75,4 @@ norm:
 
 .PHONY: all clean fclean re debug mem
 
-#${S}.SILENT:
+${S}.SILENT:
