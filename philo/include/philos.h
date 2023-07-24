@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 17:35:17 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 22:08:17 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_dinner
 }	t_dinner;
 
 //UTILS
-void		init_struct(t_dinner *dinner, int ac, char *av[]);
+void		init_struct(t_dinner *dinner, int ac, char **av);
 
 //TIMES
 long		get_times(void);
