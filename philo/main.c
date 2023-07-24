@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 16:12:45 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 17:40:23 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,25 @@ void	init_struct(t_dinner *dinner, int ac, char *av[])
 	dinner->philo = ft_calloc(dinner->nbr_philos, sizeof(*dinner->philo));
 	i = 0;
 	while (++i <= dinner->nbr_philos)
+	{
 		dinner->philo[i - 1].id = i;
-	dinner->mutex_fork = ft_calloc(dinner->nbr_philos, sizeof(pthread_mutex_t));
+	}
 	dinner->start_time = get_times();
 }
 
 void	*routine(void *arg)
 {
-	t_dinner	*dinner;
+	t_philo	*philo;
 
-	dinner = (t_dinner *)arg;
-	printf("philo[%d] is eating\n", dinner->philo->id);
+	philo = (t_philo *)arg;
+	printf("philo[%d] is eating\n", philo->id); //TMP - just to see
 	return (NULL);
 }
 
 int	main(int argc, char **argv)
 {
 	t_dinner	dinner;
+	int			i;
 
 	if (verify_input(argc, argv))
 	{
@@ -55,5 +57,20 @@ int	main(int argc, char **argv)
 		init_struct(&dinner, argc, argv);
 	}
 	print_tester(&dinner);
+	i = -1;
+	while (++i < dinner.nbr_philos)
+	{
+		pthread_mutex_init(&dinner.fork[i].mutex_fork, NULL);
+	}
+	i = -1;
+	while (++i < dinner.nbr_philos)
+	{
+		pthread_create(&dinner.philo[i].philo, NULL, &routine, &dinner.philo[i]);
+	}
+	i = -1;
+	while (++i < dinner.nbr_philos)
+	{
+		pthread_join(dinner.philo[i].philo, NULL);
+	}
 	return (0);
 }

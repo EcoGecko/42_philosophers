@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 22:13:05 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 16:05:00 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 17:39:42 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	print_tester(t_dinner *dinner)
 	printf("Number of times each philosopher has to eat: %d\n", dinner->nbr_eats);
 	for (int i = 0; i < dinner->nbr_philos; i++)
 	{
-		printf("Fork %d state is: %d\n", i, dinner->fork[i]);
+		printf("Fork %d state is: %d\n", i, dinner->fork[i].fork);
 		printf("Philosopher number %d id is: %d\n", i, dinner->philo[i].id);
 	}
 }

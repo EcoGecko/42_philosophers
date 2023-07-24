@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 16:11:34 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 17:35:17 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@
 # include <stdlib.h>
 # include <sys/time.h>
 
+
+/* Each fork and its state */
+typedef struct s_fork
+{
+	int				fork; //is it available or not
+	pthread_mutex_t	mutex_fork;
+
+}	t_fork;
+
 /* Philo struct where I save all the philo specific information, may need to
  * tweak it a bit
  * => id - philo id
@@ -27,12 +36,15 @@
  * minimal number of meals per philo then the philo stops eating and the program
  * stops
  * */
-typedef struct s_philo
+typedef struct s_philo //TODO - Missing a way to check the state of the other philos whitout them talking to eachother
 {
 	int			id;
 	int			last_meal;
 	int			nbr_eats;
 	pthread_t	philo;
+	t_fork		*left_fork;
+	t_fork		*right_fork;
+	// t_dinner	*dinner;
 }	t_philo;
 
 /* Main struct where I store all dinner related information including the input
@@ -48,9 +60,8 @@ typedef struct s_dinner
 	int				time_sleep;
 	int				nbr_eats;
 	int				start_time;
-	int				*fork;
+	t_fork			*fork;
 	t_philo			*philo;
-	pthread_mutex_t	*mutex_fork;
 }	t_dinner;
 
 //UTILS
