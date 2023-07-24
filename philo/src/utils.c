@@ -6,17 +6,26 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:35:21 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 14:13:25 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 16:11:48 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
 
-int	ft_atoi(const char *nptr)
+int	is_digit(char c)
 {
-	int	i;
-	int	sign;
-	int	num;
+	if (c < '0' || c > '9')
+	{
+		return (0);
+	}
+	return (1);
+}
+
+long int	ft_atol(const char *nptr)
+{
+	int			i;
+	int			sign;
+	long int	num;
 
 	num = 0;
 	sign = 1;
@@ -59,4 +68,16 @@ void	ft_bzero(void *s, size_t n)
 		str++;
 		n--;
 	}
+}
+
+size_t	ft_strlen(char *str)
+{
+	size_t	size;
+
+	size = 0;
+	while (str[size])
+	{
+		size++;
+	}
+	return (size);
 }

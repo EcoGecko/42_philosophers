@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/17 22:15:00 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 16:11:34 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <pthread.h>
 # include <stdio.h>
+# include <limits.h>
 # include <stdlib.h>
 # include <sys/time.h>
 
@@ -53,15 +54,21 @@ typedef struct s_dinner
 }	t_dinner;
 
 //UTILS
-void	init_struct(t_dinner *dinner, int ac, char *av[]);
+void		init_struct(t_dinner *dinner, int ac, char *av[]);
 
 //TIMES
-long	get_times(void);
+long		get_times(void);
+
+//VALIDATE
+int			is_number(char *arg);
+int			validate_args(char **args);
+int			verify_input(int argc, char **argv);
 
 //LIBFT
-int		ft_atoi(const char *nptr);
-void	*ft_calloc(size_t nmemb, size_t size);
-void	ft_bzero(void *s, size_t n);
+long int	ft_atol(const char *nptr);
+void		*ft_calloc(size_t nmemb, size_t size);
+void		ft_bzero(void *s, size_t n);
+int			is_digit(char c);
 
 //TESTS
 void	print_tester(t_dinner *dinner);
