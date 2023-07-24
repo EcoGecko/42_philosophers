@@ -6,11 +6,11 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 22:17:46 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/17 22:17:46 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 13:15:18 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philos.h"
+#include "../include/philos.h"
 
 /* Get the time and converts it to milliseconds */
 long	get_times(void)

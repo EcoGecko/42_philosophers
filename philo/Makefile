@@ -67,7 +67,7 @@ debug:
 mem: re
 	valgrind ${VFLAGS} ./${NAME} 5 400 200 200
 
-run:
+run: re
 	./${NAME} 5 400 200 200
 
 norm:
@@ -77,4 +77,4 @@ norm:
 
 .PHONY: all clean fclean re debug mem
 
-#${S}.SILENT:
+${S}.SILENT:

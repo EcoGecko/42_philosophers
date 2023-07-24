@@ -6,11 +6,11 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 22:13:05 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/17 22:16:53 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/24 13:15:30 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philos.h"
+#include "../include/philos.h"
 
 void	print_tester(t_dinner *dinner)
 {
