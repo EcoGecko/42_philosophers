@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 22:08:17 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/25 12:08:06 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 # define PHILOS_H
 
 # include <pthread.h>
+# include <unistd.h>
 # include <stdio.h>
 # include <limits.h>
 # include <stdlib.h>
 # include <sys/time.h>
 
+typedef struct	s_dinner t_dinner;
+typedef struct	s_philo t_philo;
 
 /* Each fork and its state */
 typedef struct s_fork
@@ -44,7 +47,7 @@ typedef struct s_philo //TODO - Missing a way to check the state of the other ph
 	pthread_t	philo;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
-	// t_dinner	*dinner;
+	t_dinner	*dinner;
 }	t_philo;
 
 /* Main struct where I store all dinner related information including the input
@@ -62,6 +65,7 @@ typedef struct s_dinner
 	int				start_time;
 	t_fork			*fork;
 	t_philo			*philo;
+	pthread_mutex_t	mutex_print;
 }	t_dinner;
 
 //UTILS

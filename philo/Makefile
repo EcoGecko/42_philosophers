@@ -64,8 +64,13 @@ re: fclean all
 debug:
 	${CC} -g3 main.c ${SRCS} -I${INCDIR} -o ${NAME}
 
-mem: re
+mem:
+	DEBUG=1 make re
 	valgrind ${VFLAGS} ./${NAME} 5 400 200 200
+
+hel:
+	DEBUG=1 make re
+	valgrind --tool=helgrind ./${NAME} 5 400 200 200
 
 run: re
 	./${NAME} 5 400 200 200

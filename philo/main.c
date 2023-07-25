@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 23:15:15 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/25 12:28:47 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,15 @@ void	set_table(t_dinner *dinner, int nbr_philos)
 		{
 			dinner->philo[i - 1].left_fork = &dinner->fork[i - 1];
 		}
-		dinner->philo[i - 1].right_fork = &dinner->fork[i];
+		if (i == nbr_philos)
+		{
+			dinner->philo[i - 1].right_fork = &dinner->fork[0];
+		}
+		else
+		{
+			dinner->philo[i - 1].right_fork = &dinner->fork[i];
+		}
+		dinner->philo[i - 1].dinner = dinner;
 	}
 }
 
@@ -59,22 +67,31 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(&philo->left_fork->mutex_fork);
 	philo->left_fork->fork = 1;
+	pthread_mutex_lock(&philo->dinner->mutex_print);
 	printf("philo[%d] has taken a fork\n", philo->id); //TMP - just to see
+	pthread_mutex_unlock(&philo->dinner->mutex_print);
 	pthread_mutex_unlock(&philo->left_fork->mutex_fork);
 	pthread_mutex_lock(&philo->right_fork->mutex_fork);
 	philo->right_fork->fork = 1;
+	pthread_mutex_lock(&philo->dinner->mutex_print);
 	printf("philo[%d] has taken a fork\n", philo->id); //TMP - just to see
+	pthread_mutex_unlock(&philo->dinner->mutex_print);
 	pthread_mutex_unlock(&philo->right_fork->mutex_fork);
+	pthread_mutex_lock(&philo->dinner->mutex_print);
 	printf("philo[%d] is eating\n", philo->id); //TMP - just to see
+	pthread_mutex_unlock(&philo->dinner->mutex_print);
 	pthread_mutex_lock(&philo->left_fork->mutex_fork);
 	philo->left_fork->fork = 0;
+	pthread_mutex_lock(&philo->dinner->mutex_print);
 	printf("philo[%d] has dropped a fork\n", philo->id); //TMP - just to see
+	pthread_mutex_unlock(&philo->dinner->mutex_print);
 	pthread_mutex_unlock(&philo->left_fork->mutex_fork);
 	pthread_mutex_lock(&philo->right_fork->mutex_fork);
 	philo->right_fork->fork = 0;
+	pthread_mutex_lock(&philo->dinner->mutex_print);
 	printf("philo[%d] has dropped a fork\n", philo->id); //TMP - just to see
+	pthread_mutex_unlock(&philo->dinner->mutex_print);
 	pthread_mutex_unlock(&philo->right_fork->mutex_fork);
-
 	return (NULL);
 }
 
