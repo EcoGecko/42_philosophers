@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/25 12:08:06 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/25 14:15:18 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_fork
 typedef struct s_philo //TODO - Missing a way to check the state of the other philos whitout them talking to eachother
 {
 	int			id;
-	int			last_meal;
+	long			last_meal;
 	int			nbr_eats;
 	pthread_t	philo;
 	t_fork		*left_fork;
@@ -62,7 +62,7 @@ typedef struct s_dinner
 	int				time_eat;
 	int				time_sleep;
 	int				nbr_eats;
-	int				start_time;
+	long			start_time;
 	t_fork			*fork;
 	t_philo			*philo;
 	pthread_mutex_t	mutex_print;
@@ -78,6 +78,9 @@ long		get_times(void);
 int			is_number(char *arg);
 int			validate_args(char **args);
 int			verify_input(int argc, char **argv);
+
+//ROUTINE
+void		eat(t_philo *philo);
 
 //LIBFT
 long int	ft_atol(const char *nptr);

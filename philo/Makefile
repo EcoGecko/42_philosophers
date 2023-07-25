@@ -35,7 +35,7 @@ INCDIR	= include
 
 #FILES
 
-SRCF	= utils times validate tests
+SRCF	= utils times validate routine tests
 
 SRCS	= $(addprefix ${SRCDIR}/, $(addsuffix .c, ${SRCF}))
 OBJS	= $(addprefix ${OBJDIR}/, $(addsuffix .o, ${SRCF}))

@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/25 12:28:47 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/25 14:07:07 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,7 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->left_fork->mutex_fork);
-	philo->left_fork->fork = 1;
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("philo[%d] has taken a fork\n", philo->id); //TMP - just to see
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
-	pthread_mutex_unlock(&philo->left_fork->mutex_fork);
-	pthread_mutex_lock(&philo->right_fork->mutex_fork);
-	philo->right_fork->fork = 1;
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("philo[%d] has taken a fork\n", philo->id); //TMP - just to see
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
-	pthread_mutex_unlock(&philo->right_fork->mutex_fork);
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("philo[%d] is eating\n", philo->id); //TMP - just to see
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
+	eat(philo);
 	pthread_mutex_lock(&philo->left_fork->mutex_fork);
 	philo->left_fork->fork = 0;
 	pthread_mutex_lock(&philo->dinner->mutex_print);
@@ -109,6 +95,7 @@ int	main(int argc, char **argv)
 		init_struct(&dinner, argc, argv);
 	}
 	print_tester(&dinner);
+	pthread_mutex_init(&dinner.mutex_print, NULL);
 	i = -1;
 	while (++i < dinner.nbr_philos)
 	{
@@ -124,5 +111,11 @@ int	main(int argc, char **argv)
 	{
 		pthread_join(dinner.philo[i].philo, NULL);
 	}
+	i = -1;
+	while (++i < dinner.nbr_philos)
+	{
+		pthread_mutex_destroy(&dinner.fork[i].mutex_fork);
+	}
+	pthread_mutex_destroy(&dinner.mutex_print);
 	return (0);
 }
