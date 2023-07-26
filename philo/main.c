@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/25 14:07:07 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/26 23:35:38 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,42 @@ void	set_table(t_dinner *dinner, int nbr_philos)
 {
 	int	i;
 
+	(void)nbr_philos;
 	i = 0;
 	while (++i <= dinner->nbr_philos)
 	{
 		dinner->philo[i - 1].id = i;
-		if (i == 1)
+		dinner->philo[i - 1].dinner = dinner;
+		if (i % 2 == 0)
 		{
-			dinner->philo[i - 1].left_fork = &dinner->fork[nbr_philos - 1];
-		}
-		else
-		{
+			if (i == dinner->nbr_philos)
+			{
+				dinner->philo[i - 1].left_fork = &dinner->fork[i - 1];
+				dinner->philo[i - 1].right_fork = &dinner->fork[0];
+				continue ;
+			}
 			dinner->philo[i - 1].left_fork = &dinner->fork[i - 1];
-		}
-		if (i == nbr_philos)
-		{
-			dinner->philo[i - 1].right_fork = &dinner->fork[0];
-		}
-		else
-		{
 			dinner->philo[i - 1].right_fork = &dinner->fork[i];
 		}
-		dinner->philo[i - 1].dinner = dinner;
+		else
+		{
+			if (i == dinner->nbr_philos)
+			{
+				dinner->philo[i - 1].left_fork = &dinner->fork[0];
+				dinner->philo[i - 1].right_fork = &dinner->fork[i - 1];
+				continue ;
+			}
+			dinner->philo[i - 1].left_fork = &dinner->fork[i];
+			dinner->philo[i - 1].right_fork = &dinner->fork[i - 1];
+
+		}
 	}
 }
 
 void	init_struct(t_dinner *dinner, int ac, char **av)
 {
+	dinner->philo_full = 0;
+	dinner->end_dinner = 0;
 	dinner->nbr_philos = ft_atol(av[1]);
 	dinner->time_die = ft_atol(av[2]);
 	dinner->time_eat = ft_atol(av[3]);
@@ -65,20 +75,38 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	eat(philo);
-	pthread_mutex_lock(&philo->left_fork->mutex_fork);
-	philo->left_fork->fork = 0;
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("philo[%d] has dropped a fork\n", philo->id); //TMP - just to see
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
-	pthread_mutex_unlock(&philo->left_fork->mutex_fork);
-	pthread_mutex_lock(&philo->right_fork->mutex_fork);
-	philo->right_fork->fork = 0;
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("philo[%d] has dropped a fork\n", philo->id); //TMP - just to see
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
-	pthread_mutex_unlock(&philo->right_fork->mutex_fork);
+	while (1)
+	{
+		eating(philo);
+		pthread_mutex_lock(&philo->dinner->mutex_print);
+		if (philo->dinner->nbr_eats != -1 && philo->dinner->philo_full == philo->dinner->nbr_philos)
+		{
+			pthread_mutex_unlock(&philo->dinner->mutex_print);
+			break ;
+		}
+		if (philo->dinner->end_dinner == 1)
+		{
+			pthread_mutex_unlock(&philo->dinner->mutex_print);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->dinner->mutex_print);
+		pthread_mutex_lock(&philo->dinner->mutex_print);
+		if (philo->nbr_meals == philo->dinner->nbr_eats)
+		{
+			philo->dinner->philo_full++;
+		}
+		pthread_mutex_unlock(&philo->dinner->mutex_print);
+		sleeping(philo);
+		thinking(philo);
+		death(philo);
+	}
 	return (NULL);
+}
+
+void	clean_all(t_dinner *dinner)
+{
+	free(dinner->fork);
+	free(dinner->philo);
 }
 
 int	main(int argc, char **argv)
@@ -94,7 +122,7 @@ int	main(int argc, char **argv)
 	{
 		init_struct(&dinner, argc, argv);
 	}
-	print_tester(&dinner);
+	// print_tester(&dinner); //REMOVE
 	pthread_mutex_init(&dinner.mutex_print, NULL);
 	i = -1;
 	while (++i < dinner.nbr_philos)
@@ -117,5 +145,6 @@ int	main(int argc, char **argv)
 		pthread_mutex_destroy(&dinner.fork[i].mutex_fork);
 	}
 	pthread_mutex_destroy(&dinner.mutex_print);
+	clean_all(&dinner);
 	return (0);
 }

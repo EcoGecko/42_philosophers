@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/25 14:15:18 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/26 13:47:53 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ typedef struct s_fork
 typedef struct s_philo //TODO - Missing a way to check the state of the other philos whitout them talking to eachother
 {
 	int			id;
-	long			last_meal;
-	int			nbr_eats;
+	long		last_meal;	//time of the last meal
+	int			nbr_meals; //nbr of meals per philo
 	pthread_t	philo;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
@@ -62,7 +62,9 @@ typedef struct s_dinner
 	int				time_eat;
 	int				time_sleep;
 	int				nbr_eats;
-	long			start_time;
+	int				philo_full; //number of philos that have finished all their meals
+	long			start_time; //time when the program starts
+	int				end_dinner; //if a philo dies this is set to 1 and the program stops
 	t_fork			*fork;
 	t_philo			*philo;
 	pthread_mutex_t	mutex_print;
@@ -80,7 +82,10 @@ int			validate_args(char **args);
 int			verify_input(int argc, char **argv);
 
 //ROUTINE
-void		eat(t_philo *philo);
+void		eating(t_philo *philo);
+void		sleeping(t_philo *philo);
+void		thinking(t_philo *philo);
+void		death(t_philo *philo);
 
 //LIBFT
 long int	ft_atol(const char *nptr);
