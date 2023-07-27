@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/26 13:47:53 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/27 17:33:32 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@
 # include <stdlib.h>
 # include <sys/time.h>
 
-typedef struct	s_dinner t_dinner;
-typedef struct	s_philo t_philo;
+typedef struct s_dinner	t_dinner;
+typedef struct s_philo	t_philo;
 
 /* Each fork and its state */
 typedef struct s_fork
 {
-	int				fork; //is it available or not
+	int				fork;
 	pthread_mutex_t	mutex_fork;
 
 }	t_fork;
@@ -39,11 +39,11 @@ typedef struct s_fork
  * minimal number of meals per philo then the philo stops eating and the program
  * stops
  * */
-typedef struct s_philo //TODO - Missing a way to check the state of the other philos whitout them talking to eachother
+typedef struct s_philo
 {
 	int			id;
-	long		last_meal;	//time of the last meal
-	int			nbr_meals; //nbr of meals per philo
+	long		last_meal;
+	int			nbr_meals;
 	pthread_t	philo;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
@@ -62,16 +62,21 @@ typedef struct s_dinner
 	int				time_eat;
 	int				time_sleep;
 	int				nbr_eats;
-	int				philo_full; //number of philos that have finished all their meals
-	long			start_time; //time when the program starts
-	int				end_dinner; //if a philo dies this is set to 1 and the program stops
+	int				philo_full;
+	long			start_time;
+	int				end_dinner;
 	t_fork			*fork;
 	t_philo			*philo;
 	pthread_mutex_t	mutex_print;
+	pthread_mutex_t	mutex_death;
+	pthread_mutex_t	mutex_meals;
 }	t_dinner;
 
 //UTILS
-void		init_struct(t_dinner *dinner, int ac, char **av);
+int			check_death(t_philo *philo, int flag);
+void		set_odd_forks(t_dinner *dinner, int i);
+void		set_even_forks(t_dinner *dinner, int i);
+void		set_table(t_dinner *dinner);
 
 //TIMES
 long		get_times(void);
@@ -93,6 +98,4 @@ void		*ft_calloc(size_t nmemb, size_t size);
 void		ft_bzero(void *s, size_t n);
 int			is_digit(char c);
 
-//TESTS
-void	print_tester(t_dinner *dinner);
 #endif

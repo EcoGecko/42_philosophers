@@ -5,79 +5,78 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/17 16:35:21 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 16:11:48 by heda-sil         ###   ########.fr       */
+/*   Created: 2023/07/27 17:19:53 by heda-sil          #+#    #+#             */
+/*   Updated: 2023/07/27 18:59:29 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
 
-int	is_digit(char c)
+int	check_death(t_philo *philo, int flag)
 {
-	if (c < '0' || c > '9')
+	pthread_mutex_lock(&philo->dinner->mutex_meals);
+	pthread_mutex_lock(&philo->dinner->mutex_death);
+	if (philo->dinner->end_dinner == 1)
 	{
-		return (0);
+		if (flag)
+		{
+			pthread_mutex_unlock(&philo->left_fork->mutex_fork);
+		}
+		pthread_mutex_unlock(&philo->right_fork->mutex_fork);
+		pthread_mutex_unlock(&philo->dinner->mutex_death);
+		pthread_mutex_unlock(&philo->dinner->mutex_meals);
+		return (1);
 	}
-	return (1);
+	pthread_mutex_unlock(&philo->dinner->mutex_death);
+	pthread_mutex_unlock(&philo->dinner->mutex_meals);
+	return (0);
 }
 
-long int	ft_atol(const char *nptr)
+void	set_odd_forks(t_dinner *dinner, int i)
 {
-	int			i;
-	int			sign;
-	long int	num;
+	if (i == dinner->nbr_philos)
+	{
+		dinner->philo[i - 1].left_fork = &dinner->fork[i - 1];
+		dinner->philo[i - 1].right_fork = &dinner->fork[0];
+	}
+	else
+	{
+		dinner->philo[i - 1].left_fork = &dinner->fork[i - 1];
+		dinner->philo[i - 1].right_fork = &dinner->fork[i];
+	}
+}
 
-	num = 0;
-	sign = 1;
+void	set_even_forks(t_dinner *dinner, int i)
+{
+	if (i == dinner->nbr_philos)
+	{
+		dinner->philo[i - 1].left_fork = &dinner->fork[0];
+		dinner->philo[i - 1].right_fork = &dinner->fork[i - 1];
+	}
+	else
+	{
+		dinner->philo[i - 1].left_fork = &dinner->fork[i];
+		dinner->philo[i - 1].right_fork = &dinner->fork[i - 1];
+	}
+}
+
+void	set_table(t_dinner *dinner)
+{
+	int	i;
+
 	i = 0;
-	while ((nptr[i] >= '\t' && nptr[i] <= '\r') || nptr[i] == ' ')
-		i++;
-	if (nptr[i] == '+' || nptr[i] == '-')
+	while (++i <= dinner->nbr_philos)
 	{
-		if (nptr[i] == '-')
-			sign *= -1;
-		i++;
+		dinner->philo[i - 1].id = i;
+		dinner->philo[i - 1].dinner = dinner;
+		dinner->philo[i - 1].nbr_meals = 0;
+		if (i % 2 == 0)
+		{
+			set_even_forks(dinner, i);
+		}
+		else
+		{
+			set_odd_forks(dinner, i);
+		}
 	}
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		num = num * 10 + nptr[i] - '0';
-		i++;
-	}
-	return (num * sign);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	char	*array;
-
-	array = (void *)malloc(nmemb * size);
-	if (!array)
-		return (NULL);
-	ft_bzero (array, nmemb * size);
-	return (array);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	char	*str;
-
-	str = s;
-	while (n > 0)
-	{
-		*str = 0;
-		str++;
-		n--;
-	}
-}
-
-size_t	ft_strlen(char *str)
-{
-	size_t	size;
-
-	size = 0;
-	while (str[size])
-	{
-		size++;
-	}
-	return (size);
 }
