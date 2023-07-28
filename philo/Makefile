@@ -70,7 +70,7 @@ mem:
 
 hel:
 	DEBUG=1 make re
-	valgrind --tool=helgrind ./${NAME} 10 400 200 200
+	valgrind --tool=helgrind ./${NAME} 2 800 200 200 1
 
 run: re
 	./${NAME} 5 410 200 200

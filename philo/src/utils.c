@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 17:19:53 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/27 18:59:29 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/28 12:09:30 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	check_death(t_philo *philo, int flag)
 			pthread_mutex_unlock(&philo->left_fork->mutex_fork);
 		}
 		pthread_mutex_unlock(&philo->right_fork->mutex_fork);
-		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		pthread_mutex_unlock(&philo->dinner->mutex_meals);
+		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	pthread_mutex_unlock(&philo->dinner->mutex_meals);
+	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	return (0);
 }
 

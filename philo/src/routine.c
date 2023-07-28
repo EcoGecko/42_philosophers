@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 14:01:20 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/27 20:21:45 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/28 12:08:46 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	eating(t_philo *philo)
 		death(philo);
 		pthread_mutex_unlock(&philo->right_fork->mutex_fork);
 		return ;
-	} 
+	}
 	pthread_mutex_lock(&philo->left_fork->mutex_fork);
 	if (check_death(philo, 1))
 	{
@@ -41,6 +41,7 @@ void	eating(t_philo *philo)
 	philo->last_meal = get_times();
 	philo->nbr_meals++;
 	usleep(philo->dinner->time_eat * 1000);
+	end_dinner(philo);
 	pthread_mutex_unlock(&philo->right_fork->mutex_fork);
 	pthread_mutex_unlock(&philo->left_fork->mutex_fork);
 
@@ -71,8 +72,8 @@ void	thinking(t_philo *philo)
 	pthread_mutex_lock(&philo->dinner->mutex_death);
 	if (philo->dinner->end_dinner == 1)
 	{
-		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		pthread_mutex_unlock(&philo->dinner->mutex_meals);
+		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		return ;
 	}
 	pthread_mutex_lock(&philo->dinner->mutex_print);

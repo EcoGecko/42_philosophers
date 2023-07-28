@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/27 18:57:50 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/07/28 19:17:53 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,16 @@ int	end_dinner(t_philo *philo)
 	{
 		philo->dinner->philo_full++;
 	}
-	pthread_mutex_unlock(&philo->dinner->mutex_meals);
 	pthread_mutex_lock(&philo->dinner->mutex_death);
 	if (philo->dinner->nbr_eats != -1 && \
 	philo->dinner->philo_full == philo->dinner->nbr_philos)
 	{
 		philo->dinner->end_dinner = 1;
+		pthread_mutex_unlock(&philo->dinner->mutex_meals);
 		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->dinner->mutex_death);
-	pthread_mutex_lock(&philo->dinner->mutex_death);
-	if (philo->dinner->end_dinner == 1)
-	{
-		pthread_mutex_unlock(&philo->dinner->mutex_death);
-		return (1);
-	}
+	pthread_mutex_unlock(&philo->dinner->mutex_meals);
 	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	return (0);
 }
@@ -69,10 +63,13 @@ void	*routine(void *arg)
 	while (1)
 	{
 		eating(philo);
-		if (end_dinner(philo))
+		pthread_mutex_lock(&philo->dinner->mutex_death);
+		if (philo->dinner->end_dinner == 1)
 		{
+			pthread_mutex_unlock(&philo->dinner->mutex_death);
 			break ;
 		}
+		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		sleeping(philo);
 		thinking(philo);
 		death(philo);
@@ -95,10 +92,7 @@ int	main(int argc, char **argv)
 	{
 		return (1);
 	}
-	else
-	{
-		init_struct(&dinner, argc, argv);
-	}
+	init_struct(&dinner, argc, argv);
 	pthread_mutex_init(&dinner.mutex_print, NULL);
 	pthread_mutex_init(&dinner.mutex_death, NULL);
 	pthread_mutex_init(&dinner.mutex_meals, NULL);

@@ -98,4 +98,6 @@ void		*ft_calloc(size_t nmemb, size_t size);
 void		ft_bzero(void *s, size_t n);
 int			is_digit(char c);
 
+
+int	end_dinner(t_philo *philo);
 #endif
