@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/02 18:16:59 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/08/02 19:43:01 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,33 +55,31 @@ int	main(int argc, char **argv)
 			philo_life(&dinner.philo[i]);
 		}
 	}
-	// while (waitpid(0, &flag, 0) > 0)
-	// {
-	// 	if (WIFEXITED(flag))
-	// 	{
-	// 		flag = WEXITSTATUS(flag);
-	// 	}
-	// }
+	while (waitpid(0, &flag, 0) > 0)
+	{
+		if (WIFEXITED(flag))
+		{
+			flag = WEXITSTATUS(flag);
+		}
+		if (flag)
+		{
+			break ;
+		}
+	}
 	waitpid(0, &flag, 0);
-	// sem_wait(dinner.print);
 	if (WIFEXITED(flag))
 	{
 		flag = WEXITSTATUS(flag);
 	}
-	i = -1;
 	sem_close(dinner.print);
 	sem_close(dinner.forks);
 	sem_unlink("/print");
 	sem_unlink("/forks");
+	i = -1;
 	while (++i < dinner.nbr_philos)
 	{
 		kill(dinner.philo[i].pid, SIGKILL);
-		// sem_post(dinner.print);
 	}
-	// sem_post(dinner.print);
-	// sem_close(dinner.print);
-	// sem_close(dinner.forks);
-	// sem_unlink("/print");
-	// sem_unlink("/forks");
+	(void)flag;
 	return (0);
 }
