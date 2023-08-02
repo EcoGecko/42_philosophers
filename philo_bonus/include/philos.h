@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/28 22:08:43 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/08/02 14:12:01 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@
 
 # include <semaphore.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <stdlib.h>
 # include <sys/time.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include <stdio.h>
 # include <limits.h>
 # include <signal.h>
+# include <sys/stat.h>
 
 typedef struct s_dinner	t_dinner;
 typedef struct s_philo	t_philo;
@@ -31,9 +35,10 @@ typedef struct s_philo
 	int		id;
 	int		nbr_meals;
 	long	last_meal;
+	t_dinner	*dinner;
 }	t_philo;
 
-typedef struct	s_dinner
+typedef struct s_dinner
 {
 	int		nbr_philos;
 	long	time_die;
@@ -43,13 +48,22 @@ typedef struct	s_dinner
 	int		philo_full;
 	long	start_time;
 	int		nbr_forks;
-	t_philo	*philos;
+	t_philo	*philo;
+	sem_t	*print;
+	sem_t	*forks;
 }	t_dinner;
 
 //VALIDATE
 int			is_number(char *arg);
 int			validate_args(char **args);
-int			verify_input(int argc, char **argv);
+int			verify_args(int argc, char **argv);
+
+//ROUTINE
+void	philo_life(t_philo *philo);
+
+//UTILS
+long	get_times(void);
+void	set_table(t_dinner *dinner);
 
 //LIBFT
 long int	ft_atol(const char *nptr);

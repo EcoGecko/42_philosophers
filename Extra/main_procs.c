@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 12:11:01 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/17 12:11:01 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/08/02 14:09:45 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
-#define PHILO 5
+#define PHILO 3
 
 int	main(void)
 {
@@ -56,6 +56,7 @@ int	main(void)
 			return (1);
 		}
 	}
+	printf("Waiting for philosophers to finish\n");
 	for (i = 0; i < PHILO; i++)
 		wait(NULL);
 //	forks = sem_open("/forks", 0);

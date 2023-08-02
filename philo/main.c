@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/28 19:17:53 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/08/02 11:03:46 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ int	main(int argc, char **argv)
 	}
 	pthread_mutex_destroy(&dinner.mutex_print);
 	pthread_mutex_destroy(&dinner.mutex_death);
+	pthread_mutex_destroy(&dinner.mutex_meals);
 	clean_all(&dinner);
 	return (0);
 }

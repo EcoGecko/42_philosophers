@@ -1,5 +1,5 @@
 #NAME
-NAME	= philo
+NAME	= philo_bonus
 
 #COMPILATION
 CC		= cc
@@ -35,7 +35,7 @@ INCDIR	= include
 
 #FILES
 
-SRCF	= validate libft
+SRCF	= validate libft utils routine
 
 SRCS	= $(addprefix ${SRCDIR}/, $(addsuffix .c, ${SRCF}))
 OBJS	= $(addprefix ${OBJDIR}/, $(addsuffix .o, ${SRCF}))
