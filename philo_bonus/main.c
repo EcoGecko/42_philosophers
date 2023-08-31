@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/31 16:34:00 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/08/31 18:23:21 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@ void	create_philos(t_dinner *dinner, int ac, char **av)
 	dinner->start_time = get_times();
 }
 
+void	kill_philos(t_dinner *dinner)
+{
+	int	i;
+
+	i = -1;
+	while (++i < dinner->nbr_philos)
+	{
+		kill(dinner->philo[i].pid, SIGTERM);
+	}
+}
+
 void	fork_philos(t_dinner *dinner)
 {
 	int	i;
@@ -45,34 +56,11 @@ void	fork_philos(t_dinner *dinner)
 		{
 			philo_life(&dinner->philo[i]);
 		}
-	}
-}
-
-void	kill_philos(t_dinner *dinner)
-{
-	int	i;
-
-	i = -1;
-	while (++i < dinner->nbr_philos)
-	{
-		kill(dinner->philo[i].pid, SIGKILL);
-	}
-}
-
-void	wait_philos(t_dinner *dinner)
-{
-	int	flag;
-
-	while (waitpid(0, &flag, 0) > 0)
-	{
-		if (WIFEXITED(flag))
+		else
 		{
-			flag = WEXITSTATUS(flag);
-		}
-		if (flag)
-		{
+			sem_wait(dinner->end);
 			kill_philos(dinner);
-			break ;
+			waitpid(-1, NULL, 0);
 		}
 	}
 }
@@ -86,15 +74,15 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	create_philos(&dinner, argc, argv);
-	dinner.print = sem_open("/print", O_CREAT, 0644, 1);
-	dinner.end = sem_open("/print", O_CREAT, 0644, 1);
-	dinner.forks = sem_open("/forks", O_CREAT, 0644, dinner.nbr_philos);
-	fork_philos(&dinner);
-	wait_philos(&dinner);
-	sem_close(dinner.print);
-	sem_close(dinner.forks);
 	sem_unlink("/print");
 	sem_unlink("/forks");
-	// kill_philos(&dinner);
+	sem_unlink("/end");
+	dinner.print = sem_open("/print", O_CREAT, 0644, 1);
+	dinner.end = sem_open("/end", O_CREAT, 0644, 0);
+	dinner.forks = sem_open("/forks", O_CREAT, 0644, dinner.nbr_philos);
+	fork_philos(&dinner);
+	sem_close(dinner.print);
+	sem_close(dinner.forks);
+	sem_close(dinner.end);
 	return (0);
 }
