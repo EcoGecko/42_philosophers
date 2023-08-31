@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:47:23 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/02 19:44:42 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:36:56 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	end_dinner(t_philo *philo)
 		if (philo->last_meal + philo->dinner->time_die < get_times())
 		{
 			printf("%ld %d died\n", get_times() - philo->dinner->start_time, philo->id);
-			sem_post(philo->dinner->print);
+			sem_post(philo->dinner->end);
 			exit(EXIT_FAILURE);
 		}
-		sem_post(philo->dinner->print);
+		sem_post(philo->dinner->end);
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -44,16 +44,16 @@ void	philo_life(t_philo *philo)
 		printf("%ld %d is eating\n", get_times() - philo->dinner->start_time, philo->id);
 		philo->last_meal = get_times();
 		philo->nbr_meals++;
+		sem_post(philo->dinner->print);
 		usleep(philo->dinner->time_eat * 1000);
 		sem_post(philo->dinner->forks);
 		printf("%ld %d dropped a fork\n", get_times() - philo->dinner->start_time, philo->id);
 		sem_post(philo->dinner->forks);
 		printf("%ld %d dropped a fork\n", get_times() - philo->dinner->start_time, philo->id);
 		printf("philo_life %d\n", philo->id);
-		sem_post(philo->dinner->print);
-		if (philo->last_meal + philo->dinner->time_die < get_times() || philo->nbr_meals == philo->dinner->nbr_eats)
+		if (philo->last_meal + philo->dinner->time_die <= get_times() || philo->nbr_meals == philo->dinner->nbr_eats)
 		{
-			sem_wait(philo->dinner->print);
+			sem_wait(philo->dinner->end);
 			end_dinner(philo);
 		}
 		printf("%ld %d is sleeping\n", get_times() - philo->dinner->start_time, philo->id);

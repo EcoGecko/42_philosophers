@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/02 14:12:01 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:36:19 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_dinner
 	t_philo	*philo;
 	sem_t	*print;
 	sem_t	*forks;
+	sem_t	*end;
 }	t_dinner;
 
 //VALIDATE

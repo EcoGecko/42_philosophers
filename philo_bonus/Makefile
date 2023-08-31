@@ -73,7 +73,7 @@ hel:
 	valgrind --tool=helgrind ./${NAME} 2 800 200 200 1
 
 run: re
-	./${NAME} 5 410 200 200
+	./${NAME} 5 500 800 200 1
 
 norm:
 	@printf "$(CURSIVE)$(YELLOW)"
