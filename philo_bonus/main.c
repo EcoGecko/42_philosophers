@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/31 18:23:21 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:02:37 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,26 @@ void	kill_philos(t_dinner *dinner)
 void	fork_philos(t_dinner *dinner)
 {
 	int	i;
-
+	int pid;
 
 	i = -1;
-	while (++i < dinner->nbr_philos)
+	pid = -1;
+	while (++i < dinner->nbr_philos && pid != 0)
 	{
-		dinner->philo[i].pid = fork();
-		if (dinner->philo[i].pid == 0)
+		pid = fork();
+		if (pid != 0)
 		{
-			philo_life(&dinner->philo[i]);
+			dinner->philo[i].pid = pid;
 		}
-		else
-		{
-			sem_wait(dinner->end);
-			kill_philos(dinner);
-			waitpid(-1, NULL, 0);
-		}
+	}
+	if (pid == 0)
+	{
+		philo_life(&dinner->philo[1]);
+	}
+	else
+	{
+		sem_wait(dinner->end);
+		kill_philos(dinner);
 	}
 }
 
@@ -84,5 +88,8 @@ int	main(int argc, char **argv)
 	sem_close(dinner.print);
 	sem_close(dinner.forks);
 	sem_close(dinner.end);
+	sem_unlink("/print");
+	sem_unlink("/forks");
+	sem_unlink("/end");
 	return (0);
 }

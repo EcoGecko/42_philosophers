@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:47:23 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/31 17:45:20 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/01 15:48:43 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	end_dinner(t_philo *philo)
 {
-	if (philo->last_meal - get_times() > philo->dinner->time_die || philo->nbr_meals == philo->dinner->nbr_eats)
+	if (get_times() - philo->last_meal > philo->dinner->time_die || philo->nbr_meals == philo->dinner->nbr_eats)
 	{
-		if (philo->last_meal - get_times() > philo->dinner->time_die)
+		if (get_times() - philo->last_meal > philo->dinner->time_die)
 		{
 			printf("%ld %d died\n", get_times() - philo->dinner->start_time, philo->id);
 			sem_post(philo->dinner->end);
@@ -50,7 +50,7 @@ void	philo_life(t_philo *philo)
 		printf("%ld %d dropped a fork\n", get_times() - philo->dinner->start_time, philo->id);
 		sem_post(philo->dinner->forks);
 		printf("%ld %d dropped a fork\n", get_times() - philo->dinner->start_time, philo->id);
-		if (philo->last_meal - get_times() > philo->dinner->time_die || philo->nbr_meals == philo->dinner->nbr_eats)
+		if (get_times() - philo->last_meal > philo->dinner->time_die || philo->nbr_meals == philo->dinner->nbr_eats)
 		{
 			end_dinner(philo);
 		}

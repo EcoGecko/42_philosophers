@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:56:48 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/02 13:15:02 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/01 15:10:16 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	set_table(t_dinner *dinner)
 	i = 0;
 	while (++i <= dinner->nbr_philos)
 	{
+		dinner->philo[i - 1].pid = -1;
 		dinner->philo[i - 1].id = i;
 		dinner->philo[i - 1].dinner = dinner;
 		dinner->philo[i - 1].nbr_meals = 0;
