@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 14:01:20 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/28 12:08:46 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 16:28:40 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ void	eating(t_philo *philo)
 	{
 		return ;
 	}
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("%ld %d has taken a fork\n", get_times() - philo->dinner->start_time, philo->id);
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
+	print(philo, FORK);
 	if (philo->dinner->nbr_philos == 1)
 	{
 		usleep(philo->dinner->time_die * 1000);
@@ -34,10 +32,8 @@ void	eating(t_philo *philo)
 	{
 		return ;
 	}
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("%ld %d has taken a fork\n", get_times() - philo->dinner->start_time, philo->id);
-	printf("%ld %d is eating\n", get_times() - philo->dinner->start_time, philo->id);
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
+	print(philo, FORK);
+	print(philo, EAT);
 	philo->last_meal = get_times();
 	philo->nbr_meals++;
 	usleep(philo->dinner->time_eat * 1000);
@@ -57,10 +53,7 @@ void	sleeping(t_philo *philo)
 		pthread_mutex_unlock(&philo->dinner->mutex_meals);
 		return ;
 	}
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("%ld %d is sleeping\n", get_times() - philo->dinner->start_time, \
-	philo->id);
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
+	print(philo, SLEEP);
 	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	pthread_mutex_unlock(&philo->dinner->mutex_meals);
 	usleep(philo->dinner->time_sleep * 1000);
@@ -76,10 +69,7 @@ void	thinking(t_philo *philo)
 		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		return ;
 	}
-	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("%ld %d is thinking\n", get_times() - philo->dinner->start_time, \
-	philo->id);
-	pthread_mutex_unlock(&philo->dinner->mutex_print);
+	print(philo, THINK);
 	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	pthread_mutex_unlock(&philo->dinner->mutex_meals);
 }
@@ -87,7 +77,7 @@ void	thinking(t_philo *philo)
 void	death(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->dinner->mutex_death);
-	if (philo->last_meal + philo->dinner->time_die < get_times())
+	if (get_times() - philo->last_meal > philo->dinner->time_die)
 	{
 		if (philo->dinner->end_dinner == 1)
 		{

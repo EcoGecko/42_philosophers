@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 17:19:53 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/28 12:09:30 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 16:20:41 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,15 @@ void	set_table(t_dinner *dinner)
 			set_odd_forks(dinner, i);
 		}
 	}
+}
+
+void	print(t_philo *philo, char *str)
+{
+	if (philo->dinner->end_dinner == 1)
+	{
+		return ;
+	}
+	pthread_mutex_lock(&philo->dinner->mutex_print);
+	printf("%ld %d %s\n", get_times() - philo->dinner->start_time, philo->id, str);
+	pthread_mutex_unlock(&philo->dinner->mutex_print);
 }

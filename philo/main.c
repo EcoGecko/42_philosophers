@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/02 11:03:46 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 16:23:35 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,9 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (1)
+	while (philo->dinner->end_dinner == 0)
 	{
 		eating(philo);
-		pthread_mutex_lock(&philo->dinner->mutex_death);
-		if (philo->dinner->end_dinner == 1)
-		{
-			pthread_mutex_unlock(&philo->dinner->mutex_death);
-			break ;
-		}
-		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		sleeping(philo);
 		thinking(philo);
 		death(philo);

@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/02 11:03:36 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 16:17:07 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@
 
 typedef struct s_dinner	t_dinner;
 typedef struct s_philo	t_philo;
+
+# define FORK "has taken a fork"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
 
 /* Each fork and its state */
 typedef struct s_fork
@@ -77,6 +82,7 @@ int			check_death(t_philo *philo, int flag);
 void		set_odd_forks(t_dinner *dinner, int i);
 void		set_even_forks(t_dinner *dinner, int i);
 void		set_table(t_dinner *dinner);
+void		print(t_philo *philo, char *str);
 
 //TIMES
 long		get_times(void);

@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 15:57:12 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 16:20:42 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 15:44:11 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	validate_args(char **args)
 			return (1);
 		}
 		arg = ft_atol(args[i]);
-		if (arg < 0 || (arg > INT_MAX))
+		if (arg <= 0 || (arg > INT_MAX))
 		{
 			printf("Error: All arguments should be positive \
 and bellow int max\n");
