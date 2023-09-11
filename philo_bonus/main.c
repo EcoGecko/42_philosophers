@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/11 12:02:37 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:30:13 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ void	fork_philos(t_dinner *dinner)
 	}
 	if (pid == 0)
 	{
-		philo_life(&dinner->philo[1]);
+		philo_life(&dinner->philo[i]);
 	}
 	else
 	{
 		sem_wait(dinner->end);
 		kill_philos(dinner);
+		// waitpid(-1, NULL, 0);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/08/31 16:36:19 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:35:15 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@
 # include <limits.h>
 # include <signal.h>
 # include <sys/stat.h>
+# include <pthread.h>
+
+# define FORK "has taken a fork"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
 
 typedef struct s_dinner	t_dinner;
 typedef struct s_philo	t_philo;
