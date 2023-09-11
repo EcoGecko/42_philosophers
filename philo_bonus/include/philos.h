@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/11 12:35:15 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/11 15:12:07 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ typedef struct s_philo	t_philo;
 
 typedef struct s_philo
 {
-	pid_t	pid;
-	int		id;
-	int		nbr_meals;
-	long	last_meal;
+	pid_t		pid;
+	int			id;
+	int			nbr_meals;
+	long		last_meal;
 	t_dinner	*dinner;
+	pthread_t	monitor;
 }	t_philo;
 
 typedef struct s_dinner
@@ -58,7 +59,10 @@ typedef struct s_dinner
 	sem_t	*print;
 	sem_t	*forks;
 	sem_t	*end;
+	sem_t	*vars;
 }	t_dinner;
+
+extern int	philos_full;
 
 //VALIDATE
 int			is_number(char *arg);
