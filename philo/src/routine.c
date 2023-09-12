@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 14:01:20 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 12:49:22 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 13:36:05 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	death(t_philo *philo)
 			pthread_mutex_unlock(&philo->dinner->mutex_death);
 			return ;
 		}
-		philo->dinner->death = true;
+		// philo->dinner->death = true;
 		pthread_mutex_lock(&philo->dinner->mutex_print);
 		printf("%ld %d died\n", get_times() - philo->dinner->start_time, \
 		philo->id);

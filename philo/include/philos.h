@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 12:01:51 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 13:24:16 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_dinner
 	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_death;
 	pthread_mutex_t	mutex_meals;
+	pthread_mutex_t	mutex_monitor;
 }	t_dinner;
 
 //UTILS
