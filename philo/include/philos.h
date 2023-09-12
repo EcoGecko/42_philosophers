@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/11 16:17:07 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 12:01:51 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <limits.h>
 # include <stdlib.h>
 # include <sys/time.h>
+# include <stdbool.h>
 
 typedef struct s_dinner	t_dinner;
 typedef struct s_philo	t_philo;
@@ -49,6 +50,8 @@ typedef struct s_philo
 	int			id;
 	long		last_meal;
 	int			nbr_meals;
+	bool		died;
+	bool		full;
 	pthread_t	philo;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
@@ -69,7 +72,8 @@ typedef struct s_dinner
 	int				nbr_eats;
 	int				philo_full;
 	long			start_time;
-	int				end_dinner;
+	bool			end_dinner;
+	bool			death;
 	t_fork			*fork;
 	t_philo			*philo;
 	pthread_mutex_t	mutex_print;

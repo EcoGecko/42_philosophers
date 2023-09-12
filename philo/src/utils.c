@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 17:19:53 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/11 16:20:41 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 12:52:21 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_death(t_philo *philo, int flag)
 {
 	pthread_mutex_lock(&philo->dinner->mutex_meals);
 	pthread_mutex_lock(&philo->dinner->mutex_death);
-	if (philo->dinner->end_dinner == 1)
+	if (philo->dinner->end_dinner == 1 || philo->dinner->death)
 	{
 		if (flag)
 		{
@@ -70,6 +70,8 @@ void	set_table(t_dinner *dinner)
 		dinner->philo[i - 1].id = i;
 		dinner->philo[i - 1].dinner = dinner;
 		dinner->philo[i - 1].nbr_meals = 0;
+		dinner->philo[i - 1].died = false;
+		dinner->philo[i - 1].full = false;
 		if (i % 2 == 0)
 		{
 			set_even_forks(dinner, i);
@@ -83,10 +85,16 @@ void	set_table(t_dinner *dinner)
 
 void	print(t_philo *philo, char *str)
 {
-	if (philo->dinner->end_dinner == 1)
+	pthread_mutex_lock(&philo->dinner->mutex_meals);
+	pthread_mutex_lock(&philo->dinner->mutex_death);
+	if (philo->dinner->end_dinner || philo->dinner->death)
 	{
+		pthread_mutex_unlock(&philo->dinner->mutex_meals);
+		pthread_mutex_unlock(&philo->dinner->mutex_death);
 		return ;
 	}
+	pthread_mutex_unlock(&philo->dinner->mutex_meals);
+	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	pthread_mutex_lock(&philo->dinner->mutex_print);
 	printf("%ld %d %s\n", get_times() - philo->dinner->start_time, philo->id, str);
 	pthread_mutex_unlock(&philo->dinner->mutex_print);
