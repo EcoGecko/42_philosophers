@@ -6,29 +6,23 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 17:19:53 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 13:28:16 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 17:05:56 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
 
-int	check_death(t_philo *philo, int flag)
+int	check_death(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->dinner->mutex_meals);
-	pthread_mutex_lock(&philo->dinner->mutex_death);
-	if (philo->dinner->end_dinner == 1 || philo->dinner->death)
+	pthread_mutex_lock(&philo->dinner->mutex_time);
+	if (get_times() - philo->last_meal >= philo->dinner->time_die)
 	{
-		if (flag)
-		{
-			pthread_mutex_unlock(&philo->left_fork->mutex_fork);
-		}
-		pthread_mutex_unlock(&philo->right_fork->mutex_fork);
-		pthread_mutex_unlock(&philo->dinner->mutex_meals);
-		pthread_mutex_unlock(&philo->dinner->mutex_death);
+		philo->died = true;
+		death(philo);
+		pthread_mutex_unlock(&philo->dinner->mutex_time);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->dinner->mutex_meals);
-	pthread_mutex_unlock(&philo->dinner->mutex_death);
+	pthread_mutex_unlock(&philo->dinner->mutex_time);
 	return (0);
 }
 
@@ -70,6 +64,7 @@ void	set_table(t_dinner *dinner)
 		dinner->philo[i - 1].id = i;
 		dinner->philo[i - 1].dinner = dinner;
 		dinner->philo[i - 1].nbr_meals = 0;
+		dinner->philo[i - 1].last_meal = dinner->start_time;
 		dinner->philo[i - 1].died = false;
 		dinner->philo[i - 1].full = false;
 		if (i % 2 == 0)
@@ -85,16 +80,6 @@ void	set_table(t_dinner *dinner)
 
 void	print(t_philo *philo, char *str)
 {
-	pthread_mutex_lock(&philo->dinner->mutex_meals);
-	pthread_mutex_lock(&philo->dinner->mutex_death);
-	if (philo->dinner->end_dinner || philo->dinner->death)
-	{
-		pthread_mutex_unlock(&philo->dinner->mutex_meals);
-		pthread_mutex_unlock(&philo->dinner->mutex_death);
-		return ;
-	}
-	pthread_mutex_unlock(&philo->dinner->mutex_meals);
-	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	pthread_mutex_lock(&philo->dinner->mutex_print);
 	printf("%ld %d %s\n", get_times() - philo->dinner->start_time, philo->id, str);
 	pthread_mutex_unlock(&philo->dinner->mutex_print);

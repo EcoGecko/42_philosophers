@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 13:24:16 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 16:41:21 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_dinner
 	int				time_eat;
 	int				time_sleep;
 	int				nbr_eats;
-	int				philo_full;
+	int				philos_full;
 	long			start_time;
 	bool			end_dinner;
 	bool			death;
@@ -79,11 +79,11 @@ typedef struct s_dinner
 	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_death;
 	pthread_mutex_t	mutex_meals;
-	pthread_mutex_t	mutex_monitor;
+	pthread_mutex_t	mutex_time;
 }	t_dinner;
 
 //UTILS
-int			check_death(t_philo *philo, int flag);
+int			check_death(t_philo *philo);
 void		set_odd_forks(t_dinner *dinner, int i);
 void		set_even_forks(t_dinner *dinner, int i);
 void		set_table(t_dinner *dinner);
@@ -110,5 +110,5 @@ void		ft_bzero(void *s, size_t n);
 int			is_digit(char c);
 
 
-int	end_dinner(t_philo *philo);
+void		end_dinner(t_philo *philo);
 #endif

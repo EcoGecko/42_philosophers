@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 13:50:51 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 17:05:44 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_struct(t_dinner *dinner, int ac, char **av)
 {
-	dinner->philo_full = 0;
+	dinner->philos_full = 0;
 	dinner->end_dinner = false;
 	dinner->death = false;
 	dinner->nbr_philos = ft_atol(av[1]);
@@ -31,68 +31,51 @@ void	init_struct(t_dinner *dinner, int ac, char **av)
 	}
 	dinner->fork = ft_calloc(dinner->nbr_philos, sizeof(*dinner->fork));
 	dinner->philo = ft_calloc(dinner->nbr_philos, sizeof(*dinner->philo));
-	set_table(dinner);
 	dinner->start_time = get_times();
+	set_table(dinner);
 }
 
-void *monitoring(void *arg)
+void monitoring(t_dinner *dinner)
 {
-	t_dinner	*dinner;
 	int			i;
 
-	dinner = (t_dinner *)arg;
-	i = 0;
-	while (++i < dinner->nbr_philos)
+	while (1)
 	{
-		// pthread_mutex_lock(&dinner->mutex_monitor);
-		pthread_mutex_lock(&dinner->mutex_death);
-		if (dinner->philo[i].died)
+		i = -1;
+		while (++i < dinner->nbr_philos)
 		{
-			dinner->death = true;
-			pthread_mutex_unlock(&dinner->mutex_death);
-			// pthread_mutex_unlock(&dinner->mutex_monitor);
-			break ;
-		}
-		pthread_mutex_unlock(&dinner->mutex_death);
-		pthread_mutex_lock(&dinner->mutex_meals);
-		// if (dinner->philo[i].full)
-		// {
-		// 	dinner->philo_full++;
-		// }
-		if (dinner->nbr_eats != -1 && dinner->philo_full == dinner->nbr_philos)
-		{
-			dinner->end_dinner = true;
+			pthread_mutex_lock(&dinner->mutex_meals);
+			// if (!dinner->philo[i].full || !dinner->death)
+			// {
+				pthread_mutex_lock(&dinner->mutex_death);
+				if (check_death(&dinner->philo[i]))
+				{
+					dinner->death = true;
+				}
+				pthread_mutex_unlock(&dinner->mutex_death);
+				if (dinner->philos_full == dinner->nbr_philos)
+				{
+					dinner->end_dinner = true;
+				}
+			// }
 			pthread_mutex_unlock(&dinner->mutex_meals);
-			// pthread_mutex_unlock(&dinner->mutex_monitor);
-			break ;
+			if (dinner->death || dinner->end_dinner)
+			{
+				return ;
+			}
 		}
-		pthread_mutex_unlock(&dinner->mutex_meals);
-		if (i == dinner->nbr_eats)
-		{
-			i = 0;
-		}
-		// pthread_mutex_unlock(&dinner->mutex_monitor);
 	}
-	return (0);
 }
 
-int	end_dinner(t_philo *philo)
+void	end_dinner(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->dinner->mutex_meals);
 	if (philo->nbr_meals == philo->dinner->nbr_eats && !philo->full)
 	{
-		philo->dinner->philo_full++;
+		philo->dinner->philos_full++;
 		philo->full = true;
 	}
-	/* if (philo->dinner->nbr_eats != -1 && \
-	philo->dinner->philo_full == philo->dinner->nbr_philos)
-	{
-		philo->dinner->end_dinner = true;
-		pthread_mutex_unlock(&philo->dinner->mutex_meals);
-		return (1);
-	} */
 	pthread_mutex_unlock(&philo->dinner->mutex_meals);
-	return (0);
 }
 
 void	*routine(void *arg)
@@ -111,11 +94,10 @@ void	*routine(void *arg)
 			pthread_mutex_unlock(&philo->dinner->mutex_death);
 			return (0);
 		}
-		pthread_mutex_unlock(&philo->dinner->mutex_meals);
 		pthread_mutex_unlock(&philo->dinner->mutex_death);
+		pthread_mutex_unlock(&philo->dinner->mutex_meals);
 		sleeping(philo);
 		thinking(philo);
-		death(philo);
 	}
 	return (NULL);
 }
@@ -132,7 +114,7 @@ void	clean_all(t_dinner *dinner)
 	pthread_mutex_destroy(&dinner->mutex_print);
 	pthread_mutex_destroy(&dinner->mutex_death);
 	pthread_mutex_destroy(&dinner->mutex_meals);
-	// pthread_mutex_destroy(&dinner->mutex_monitor);
+	pthread_mutex_destroy(&dinner->mutex_time);
 	free(dinner->fork);
 	free(dinner->philo);
 }
@@ -140,7 +122,6 @@ void	clean_all(t_dinner *dinner)
 int	main(int argc, char **argv)
 {
 	t_dinner	dinner;
-	// pthread_t	monitor;
 	int			i;
 
 	if (verify_input(argc, argv))
@@ -151,7 +132,7 @@ int	main(int argc, char **argv)
 	pthread_mutex_init(&dinner.mutex_print, NULL);
 	pthread_mutex_init(&dinner.mutex_death, NULL);
 	pthread_mutex_init(&dinner.mutex_meals, NULL);
-	// pthread_mutex_init(&dinner.mutex_monitor, NULL);
+	pthread_mutex_init(&dinner.mutex_time, NULL);
 	i = -1;
 	while (++i < dinner.nbr_philos)
 	{
@@ -162,14 +143,12 @@ int	main(int argc, char **argv)
 	{
 		pthread_create(&dinner.philo[i].philo, NULL, &routine, &dinner.philo[i]);
 	}
-	// pthread_create(&monitor, NULL, &monitoring, &dinner);
 	monitoring(&dinner);
 	i = -1;
 	while (++i < dinner.nbr_philos)
 	{
 		pthread_join(dinner.philo[i].philo, NULL);
 	}
-	// pthread_detach(monitor);
 	clean_all(&dinner);
 	return (0);
 }

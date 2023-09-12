@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/11 15:12:07 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 16:37:24 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_dinner
 	long	time_eat;
 	long	time_sleep;
 	int		nbr_eats;
-	int		philo_full;
+	int		philos_full;
 	long	start_time;
 	int		nbr_forks;
 	t_philo	*philo;

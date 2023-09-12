@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/11 15:38:14 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/12 16:37:24 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int philos_full = 0;
 
 void	create_philos(t_dinner *dinner, int ac, char **av)
 {
-	dinner->philo_full = 0;
+	dinner->philos_full = 0;
 	dinner->nbr_philos = ft_atol(av[1]);
 	dinner->time_die = ft_atol(av[2]);
 	dinner->time_eat = ft_atol(av[3]);
@@ -84,8 +84,8 @@ void	fork_philos(t_dinner *dinner)
 			}
 			else if (dinner->nbr_eats != -1)
 			{
-				dinner->philo_full++;
-				if (dinner->philo_full >= dinner->nbr_philos)
+				dinner->philos_full++;
+				if (dinner->philos_full >= dinner->nbr_philos)
 				{
 					kill_philos(dinner);
 					break ;
