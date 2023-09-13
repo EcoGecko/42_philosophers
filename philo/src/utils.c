@@ -6,25 +6,11 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 17:19:53 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/13 13:19:58 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:45:53 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
-
-int	check_death(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->dinner->mutex_time);
-	if (get_times() - philo->last_meal >= philo->dinner->time_die)
-	{
-		// philo->died = true;
-		death(philo);
-		pthread_mutex_unlock(&philo->dinner->mutex_time);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->dinner->mutex_time);
-	return (0);
-}
 
 void	set_odd_forks(t_dinner *dinner, int i)
 {

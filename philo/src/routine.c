@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 14:01:20 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/13 13:29:54 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:51:44 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	eating(t_philo *philo)
 	philo->nbr_meals++;
 	pthread_mutex_unlock(&philo->dinner->mutex_meals);
 	usleep(philo->dinner->time_eat * 1000);
-	// check_full(philo);
 	pthread_mutex_unlock(&philo->right_fork->mutex_fork);
 	pthread_mutex_unlock(&philo->left_fork->mutex_fork);
 }
@@ -46,11 +45,11 @@ void	sleeping(t_philo *philo)
 
 void	thinking(t_philo *philo)
 {
-	long	think_time;
+	// long	think_time;
 
-	think_time = philo->dinner->time_die - \
-	(philo->dinner->time_eat + philo->dinner->time_sleep) / 2;
-	usleep(think_time);
+	// think_time = philo->dinner->time_die - \
+	// (philo->dinner->time_eat + philo->dinner->time_sleep) / 2;
+	// usleep(think_time);
 	print(philo, THINK);
 }
 
