@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 17:19:53 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/13 13:45:53 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/13 18:46:23 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	set_table(t_dinner *dinner)
 		dinner->philo[i - 1].dinner = dinner;
 		dinner->philo[i - 1].nbr_meals = 0;
 		dinner->philo[i - 1].last_meal = dinner->start_time;
-		dinner->philo[i - 1].died = false;
 		dinner->philo[i - 1].full = false;
 		if (i % 2 == 0)
 		{
@@ -74,6 +73,18 @@ void	print(t_philo *philo, char *str)
 	}
 	pthread_mutex_unlock(&philo->dinner->mutex_death);
 	pthread_mutex_lock(&philo->dinner->mutex_print);
-	printf("%ld %d %s\n", get_times() - philo->dinner->start_time, philo->id, str);
+	printf("%ld %d %s\n", get_times() - philo->dinner->start_time, \
+	philo->id, str);
 	pthread_mutex_unlock(&philo->dinner->mutex_print);
+}
+
+/* Get the time and converts it to milliseconds */
+long	get_times(void)
+{
+	struct timeval	time;
+	long			times;
+
+	gettimeofday(&time, NULL);
+	times = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	return (times);
 }

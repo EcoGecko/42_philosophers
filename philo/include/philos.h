@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/13 14:06:08 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/13 18:45:52 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_philo
 	int			id;
 	long		last_meal;
 	int			nbr_meals;
-	bool		died;
 	bool		full;
 	pthread_t	philo;
 	t_fork		*left_fork;
@@ -79,19 +78,16 @@ typedef struct s_dinner
 	t_philo			*philo;
 	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_death;
-	pthread_mutex_t	 mutex_meals;
-	pthread_mutex_t	 mutex_time;
+	pthread_mutex_t	mutex_meals;
+	pthread_mutex_t	mutex_time;
 
 }	t_dinner;
 
 //UTILS
-int			check_death(t_philo *philo);
 void		set_odd_forks(t_dinner *dinner, int i);
 void		set_even_forks(t_dinner *dinner, int i);
 void		set_table(t_dinner *dinner);
 void		print(t_philo *philo, char *str);
-
-//TIMES
 long		get_times(void);
 
 //VALIDATE
@@ -112,5 +108,7 @@ void		ft_bzero(void *s, size_t n);
 int			is_digit(char c);
 
 //CHECKERS
+bool		check_death(t_philo *philo);
 bool		check_full(t_philo *philo);
+void		monitoring(t_dinner *dinner);
 #endif

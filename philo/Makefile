@@ -35,7 +35,7 @@ INCDIR	= include
 
 #FILES
 
-SRCF	= utils times validate routine libft
+SRCF	= utils validate routine libft checkers
 
 SRCS	= $(addprefix ${SRCDIR}/, $(addsuffix .c, ${SRCF}))
 OBJS	= $(addprefix ${OBJDIR}/, $(addsuffix .o, ${SRCF}))
@@ -66,11 +66,11 @@ debug:
 
 mem:
 	DEBUG=1 make re
-	valgrind ${VFLAGS} ./${NAME} 5 400 200 200
+	valgrind ${VFLAGS} ./${NAME} 5 800 200 200
 
 hel:
 	DEBUG=1 make re
-	valgrind --tool=helgrind ./${NAME} 5 800 200 200 1
+	valgrind --tool=helgrind ./${NAME} 3 410 200 200 1
 
 run: re
 	./${NAME} 5 410 200 200 1

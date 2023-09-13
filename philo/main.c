@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/13 14:05:54 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/13 18:09:11 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	clean_all(t_dinner *dinner)
 
 void	initializer(t_dinner *dinner, int argc, char **argv)
 {
-	int i;
+	int	i;
 
 	init_struct(dinner, argc, argv);
 	pthread_mutex_init(&dinner->mutex_print, NULL);
@@ -90,7 +90,8 @@ void	initializer(t_dinner *dinner, int argc, char **argv)
 	i = -1;
 	while (++i < dinner->nbr_philos)
 	{
-		pthread_create(&dinner->philo[i].philo, NULL, &routine, &dinner->philo[i]);
+		pthread_create(&dinner->philo[i].philo, \
+		NULL, &routine, &dinner->philo[i]);
 	}
 }
 

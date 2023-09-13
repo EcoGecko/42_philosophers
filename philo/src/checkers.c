@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 13:45:45 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/13 14:06:36 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/13 18:11:02 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	check_death(t_philo *philo)
 	return (false);
 }
 
-bool check_full(t_philo *philo)
+bool	check_full(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->dinner->mutex_meals);
 	if (philo->nbr_meals == philo->dinner->nbr_eats && !philo->full)
@@ -42,9 +42,9 @@ bool check_full(t_philo *philo)
 	return (false);
 }
 
-void monitoring(t_dinner *dinner)
+void	monitoring(t_dinner *dinner)
 {
-	int i;
+	int	i;
 
 	while (1)
 	{
@@ -63,7 +63,7 @@ void monitoring(t_dinner *dinner)
 			pthread_mutex_unlock(&dinner->mutex_death);
 			if (dinner->death || dinner->end_dinner)
 			{
-				return;
+				return ;
 			}
 		}
 	}
