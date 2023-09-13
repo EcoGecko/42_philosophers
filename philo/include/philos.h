@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 16:41:21 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:36:06 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_philo	t_philo;
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
+# define DEATH "died"
 
 /* Each fork and its state */
 typedef struct s_fork
@@ -78,8 +79,9 @@ typedef struct s_dinner
 	t_philo			*philo;
 	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_death;
-	pthread_mutex_t	mutex_meals;
-	pthread_mutex_t	mutex_time;
+	pthread_mutex_t	 mutex_meals;
+	pthread_mutex_t	 mutex_time;
+
 }	t_dinner;
 
 //UTILS
@@ -110,5 +112,5 @@ void		ft_bzero(void *s, size_t n);
 int			is_digit(char c);
 
 
-void		end_dinner(t_philo *philo);
+bool		check_full(t_philo *philo);
 #endif
