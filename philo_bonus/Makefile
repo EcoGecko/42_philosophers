@@ -13,7 +13,7 @@ ifdef DEBUG
 endif
 
 ifdef SAN
-	CFLAGS += -fsanitize=thread
+	CFLAGS += -fsanitize=address
 endif
 
 #COLORS

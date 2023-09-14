@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 15:57:12 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/11 13:32:15 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/14 18:48:19 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	validate_args(char **args)
 			printf("Error: The %d argument is not a valid number\n", i);
 			return (1);
 		}
-		arg = ft_atol(args[i]);
+		arg = ft_atoll(args[i]);
 		if (arg <= 0 || (arg > INT_MAX))
 		{
 			printf("Error: All arguments should be positive \

@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 16:37:24 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/14 18:50:13 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <signal.h>
 # include <sys/stat.h>
 # include <pthread.h>
+# include <stdbool.h>
 
 # define FORK "has taken a fork"
 # define EAT "is eating"
@@ -40,29 +41,29 @@ typedef struct s_philo
 	pid_t		pid;
 	int			id;
 	int			nbr_meals;
-	long		last_meal;
+	bool		full;
+	long long	last_meal;
 	t_dinner	*dinner;
 	pthread_t	monitor;
 }	t_philo;
 
 typedef struct s_dinner
 {
-	int		nbr_philos;
-	long	time_die;
-	long	time_eat;
-	long	time_sleep;
-	int		nbr_eats;
-	int		philos_full;
-	long	start_time;
-	int		nbr_forks;
-	t_philo	*philo;
-	sem_t	*print;
-	sem_t	*forks;
-	sem_t	*end;
-	sem_t	*vars;
+	int			nbr_philos;
+	long long	time_die;
+	long long	time_eat;
+	long long	time_sleep;
+	int			nbr_eats;
+	int			philos_full;
+	long long	start_time;
+	int			nbr_forks;
+	t_philo		*philo;
+	sem_t		*sem_print;
+	sem_t		*sem_forks;
+	sem_t		*sem_end;
+	sem_t		*sem_eat;
+	sem_t		*sem_time;
 }	t_dinner;
-
-extern int	philos_full;
 
 //VALIDATE
 int			is_number(char *arg);
@@ -70,14 +71,17 @@ int			validate_args(char **args);
 int			verify_args(int argc, char **argv);
 
 //ROUTINE
-void	philo_life(t_philo *philo);
+void		philo_life(t_philo *philo);
+void		print(t_philo *philo, char *str);
 
 //UTILS
-long	get_times(void);
-void	set_table(t_dinner *dinner);
+long long	get_times(void);
+void		set_table(t_dinner *dinner);
+void		create_philos(t_dinner *dinner, int ac, char **av);
+void		kill_philos(t_dinner *dinner);
 
 //LIBFT
-long int	ft_atol(const char *nptr);
+long long	ft_atoll(const char *nptr);
 void		*ft_calloc(size_t nmemb, size_t size);
 void		ft_bzero(void *s, size_t n);
 int			is_digit(char c);

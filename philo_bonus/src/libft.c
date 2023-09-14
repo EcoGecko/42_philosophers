@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:35:21 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/07/24 16:11:48 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/14 18:47:50 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int	is_digit(char c)
 	return (1);
 }
 
-long int	ft_atol(const char *nptr)
+long long	ft_atoll(const char *nptr)
 {
 	int			i;
 	int			sign;
-	long int	num;
+	long long	num;
 
 	num = 0;
 	sign = 1;

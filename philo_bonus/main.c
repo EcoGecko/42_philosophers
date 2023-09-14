@@ -6,45 +6,22 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/12 16:37:24 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:58:57 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
 
-int philos_full = 0;
-
-void	create_philos(t_dinner *dinner, int ac, char **av)
+void	end_dinner(t_dinner *dinner)
 {
-	dinner->philos_full = 0;
-	dinner->nbr_philos = ft_atol(av[1]);
-	dinner->time_die = ft_atol(av[2]);
-	dinner->time_eat = ft_atol(av[3]);
-	dinner->time_sleep = ft_atol(av[4]);
-	if (ac == 6)
-	{
-		dinner->nbr_eats = ft_atol(av[5]);
-	}
-	else
-	{
-		dinner->nbr_eats = -1;
-	}
-	dinner->philo = ft_calloc(dinner->nbr_philos, sizeof(*dinner->philo));
-	set_table(dinner);
-	dinner->start_time = get_times();
-}
+	int i;
 
-void	kill_philos(t_dinner *dinner)
-{
-	int	i;
-
-	i = -1;
-	while (++i < dinner->nbr_philos)
+	i = dinner->nbr_philos;
+	while (i--)
 	{
-		kill(dinner->philo[i].pid, SIGKILL);
-		pthread_detach(dinner->philo[i].monitor);
+		sem_wait(dinner->sem_end);
 	}
-	free(dinner->philo);
+	kill_philos(dinner);
 }
 
 void	fork_philos(t_dinner *dinner)
@@ -70,30 +47,37 @@ void	fork_philos(t_dinner *dinner)
 	}
 	else
 	{
-		// sem_wait(dinner->end);
-		while (waitpid(0, NULL, 0) > 0)
-		{
-			if (WIFEXITED(flag))
-			{
-				flag = WEXITSTATUS(flag);
-			}
-			if (flag)
-			{
-				kill_philos(dinner);
-				break ;
-			}
-			else if (dinner->nbr_eats != -1)
-			{
-				dinner->philos_full++;
-				if (dinner->philos_full >= dinner->nbr_philos)
-				{
-					kill_philos(dinner);
-					break ;
-				}
-			}
-		}
-			// kill_philos(dinner);
+		end_dinner(dinner);
 	}
+}
+
+void	open_sems(t_dinner *dinner)
+{
+	sem_unlink("/print");
+	sem_unlink("/time");
+	sem_unlink("/forks");
+	sem_unlink("/end");
+	sem_unlink("/eat");
+	dinner->sem_print = sem_open("/print", O_CREAT, 0644, 1);
+	dinner->sem_time = sem_open("/time", O_CREAT, 0644, 1);
+	dinner->sem_end = sem_open("/end", O_CREAT, 0644, 0);
+	dinner->sem_forks = sem_open("/forks", O_CREAT, 0644, dinner->nbr_philos);
+	dinner->sem_eat = sem_open("/eat", O_CREAT, 0644, dinner->nbr_philos / 2);
+}
+
+void	close_sems(t_dinner *dinner)
+{
+	sem_close(dinner->sem_print);
+	sem_close(dinner->sem_time);
+	sem_close(dinner->sem_end);
+	sem_close(dinner->sem_forks);
+	sem_close(dinner->sem_eat);
+	sem_unlink("/print");
+	sem_unlink("/time");
+	sem_unlink("/forks");
+	sem_unlink("/end");
+	sem_unlink("/eat");
+
 }
 
 int	main(int argc, char **argv)
@@ -105,22 +89,8 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	create_philos(&dinner, argc, argv);
-	sem_unlink("/print");
-	sem_unlink("/forks");
-	sem_unlink("/end");
-	sem_unlink("/vars");
-	dinner.print = sem_open("/print", O_CREAT, 0644, 1);
-	dinner.end = sem_open("/end", O_CREAT, 0644, 0);
-	dinner.forks = sem_open("/forks", O_CREAT, 0644, dinner.nbr_philos);
-	dinner.vars = sem_open("/vars", O_CREAT, 0644, 1);
+	open_sems(&dinner);
 	fork_philos(&dinner);
-	sem_close(dinner.print);
-	sem_close(dinner.forks);
-	sem_close(dinner.end);
-	sem_close(dinner.vars);
-	sem_unlink("/print");
-	sem_unlink("/forks");
-	sem_unlink("/end");
-	sem_unlink("/vars");
-	return (0);
+	close_sems(&dinner);
+	return(0);
 }
