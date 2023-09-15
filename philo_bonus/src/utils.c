@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:56:48 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/14 19:28:51 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:51:44 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ long long	get_times(void)
 	return (times);
 }
 
-void create_philos(t_dinner *dinner, int ac, char **av)
+void	create_philos(t_dinner *dinner, int ac, char **av)
 {
 	dinner->philos_full = 0;
 	dinner->nbr_philos = ft_atoll(av[1]);
@@ -49,7 +49,8 @@ void create_philos(t_dinner *dinner, int ac, char **av)
 	if (ac == 6)
 	{
 		dinner->nbr_eats = ft_atoll(av[5]);
-	} else
+	}
+	else
 	{
 		dinner->nbr_eats = -1;
 	}
@@ -58,9 +59,9 @@ void create_philos(t_dinner *dinner, int ac, char **av)
 	set_table(dinner);
 }
 
-void kill_philos(t_dinner *dinner)
+void	kill_philos(t_dinner *dinner)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < dinner->nbr_philos)
@@ -70,10 +71,10 @@ void kill_philos(t_dinner *dinner)
 	free(dinner->philo);
 }
 
-void print(t_philo *philo, char *str)
+void	print(t_philo *philo, char *str)
 {
 	sem_wait(philo->dinner->sem_print);
-	printf("%lld %d %s\n", get_times() - philo->dinner->start_time,
-		   philo->id, str);
+	printf("%lld %d %s\n", get_times() - philo->dinner->start_time, \
+	philo->id, str);
 	sem_post(philo->dinner->sem_print);
 }

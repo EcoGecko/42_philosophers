@@ -6,10 +6,9 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:34:15 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/14 18:50:13 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:51:31 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef PHILOS_H
 # define PHILOS_H
@@ -32,6 +31,7 @@
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
+# define DIED "died"
 
 typedef struct s_dinner	t_dinner;
 typedef struct s_philo	t_philo;

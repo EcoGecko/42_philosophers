@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:47:23 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/14 19:28:35 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:54:23 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,18 @@
 
 bool	check_death(t_philo *philo)
 {
-	int i;
-	long long time = get_times();
+	int	i;
 
 	sem_wait(philo->dinner->sem_time);
-	if (time - philo->last_meal >= philo->dinner->time_die)
+	if (get_times() - philo->last_meal >= philo->dinner->time_die)
 	{
 		sem_post(philo->dinner->sem_time);
-		print(philo, "died");
+		print(philo, DIED);
 		i = -1;
 		while (++i < philo->dinner->nbr_philos)
 		{
 			sem_post(philo->dinner->sem_end);
 		}
-		printf("%d %d\n", i, philo->id);
 		return (true);
 	}
 	sem_post(philo->dinner->sem_time);

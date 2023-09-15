@@ -66,14 +66,14 @@ debug:
 
 mem:
 	DEBUG=1 make re
-	valgrind ${VFLAGS} ./${NAME} 5 800 200 200 1
+	valgrind ${VFLAGS} ./${NAME} 5 410 200 200
 
 hel:
 	DEBUG=1 make re
 	valgrind --tool=helgrind ./${NAME} 5 800 200 200 1
 
 run: re
-	./${NAME} 5 800 200 200 1
+	./${NAME} 5 410 200 200
 
 norm:
 	@printf "$(CURSIVE)$(YELLOW)"

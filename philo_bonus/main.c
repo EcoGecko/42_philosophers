@@ -6,7 +6,7 @@
 /*   By: heda-sil <heda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 14:35:43 by heda-sil          #+#    #+#             */
-/*   Updated: 2023/09/14 16:58:57 by heda-sil         ###   ########.fr       */
+/*   Updated: 2023/09/15 12:09:34 by heda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	end_dinner(t_dinner *dinner)
 {
-	int i;
+	int	i;
 
 	i = dinner->nbr_philos;
 	while (i--)
@@ -28,11 +28,9 @@ void	fork_philos(t_dinner *dinner)
 {
 	int	i;
 	int	pid;
-	int flag;
 
 	i = -1;
 	pid = -1;
-	flag = 0;
 	while (++i < dinner->nbr_philos && pid != 0)
 	{
 		pid = fork();
@@ -77,7 +75,6 @@ void	close_sems(t_dinner *dinner)
 	sem_unlink("/forks");
 	sem_unlink("/end");
 	sem_unlink("/eat");
-
 }
 
 int	main(int argc, char **argv)
@@ -92,5 +89,5 @@ int	main(int argc, char **argv)
 	open_sems(&dinner);
 	fork_philos(&dinner);
 	close_sems(&dinner);
-	return(0);
+	return (0);
 }
